@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ScoreBoard from "./components/score-board/score-board";
 import useMediator from "./hooks/useMediator";
 import classnames from "classnames";
-import logo from "./logo.svg";
+// import logo from "./logo.svg";
 
 import "./App.css";
 import TextInput from "./components/text-input/text-input";
@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className={classnames("App-logo", isConnected ? "animation-active" : "")} alt="logo" />
+        {/* <img src={logo} className={classnames("App-logo", isConnected ? "animation-active" : "")} alt="logo" /> */}
         <TextInput
           label="Client ID"
           value={clientId}
