@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+ const webpack = require('webpack');
 
 module.exports = {
   mode: "development",
@@ -24,26 +25,33 @@ module.exports = {
     historyApiFallback: true,
   },
   resolve: {
-    extensions: [".ts", ".tsx"],
+    extensions: [".ts", ".tsx", ".js"],
   },
   module: {
     rules: [
       {
+        test: /\.js$/, // Apply this rule to files ending in .js
+        exclude: /node_modules/, // Don't apply to files residing in node_modules
+        use: {
+          loader: "ts-loader", // Use ts-loader for JavaScript files
+        },
+      },
+      {
         test: /\.tsx?$/, // .ts, .tsx
+        exclude: /node_modules/,
         use: {
           loader: "ts-loader",
           options: {
             configFile: "tsconfig.json",
           },
         },
-        exclude: /node_modules/,
       },
       {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.(png|svg||jpg|jpeg|gif)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
         use: [
           {
             loader: "file-loader",
@@ -67,5 +75,10 @@ module.exports = {
       template: path.resolve(__dirname, "public", "index.html"),
       filename: "index.html", // output html name.
     }),
+
+    // adding enviroment variables. accessible from process.env 
+    new webpack.DefinePlugin({
+      'process.env.REACT_APP_MEDIATOR_WS_URL': JSON.stringify('wss://naor-twig-14-04-2024-mediator-1b8fbfd72259.herokuapp.com')
+    })
   ],
 };

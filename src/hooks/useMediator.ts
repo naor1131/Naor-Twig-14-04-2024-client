@@ -17,16 +17,21 @@ function useMediator(wsURL: string, clientId: string) {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    const ws = new WebSocket(`${wsURL}?clientId=${clientId}`);
+    const wsServerURL = `${wsURL}?clientId=${clientId}`;
+    console.log(wsServerURL);
+    const ws = new WebSocket(wsServerURL);
 
-    ws.onopen = () => {
+    ws.onopen = function (this: WebSocket, ev: Event) {
       setIsWsConnected(true);
       setErrorMessage("");
     };
 
     ws.onmessage = (event: MessageEvent) => {
       // ignore this automatic connected message.
-      if (event.data === "connected") return;
+      if (event.data === "connected") {
+        return;
+      }
+
       // parse the stringified message to JSON.
       const wsMessage: WSMessage = JSON.parse(event.data);
 
@@ -54,7 +59,7 @@ function useMediator(wsURL: string, clientId: string) {
     return () => {
       ws.close();
     };
-  }, [wsURL, clientId]);
+  }, [clientId]);
 
   return { isConnected: isWsConnected, gameState, errorMessage };
 }

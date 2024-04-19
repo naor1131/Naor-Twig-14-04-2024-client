@@ -4,13 +4,13 @@ import useMediator from "./hooks/useMediator";
 import classnames from "classnames";
 // import logo from "./logo.svg";
 import TextInput from "./components/text-input/text-input";
-
+import { MEDIATOR_WS_URL } from "./types";
 
 import "./App.css";
 
 function App() {
   const [clientId, setClientId] = useState("");
-  const { isConnected, gameState, errorMessage } = useMediator("ws://localhost:8080", clientId);
+  const { isConnected, gameState, errorMessage } = useMediator(MEDIATOR_WS_URL, clientId);
 
   const color = gameState.score > gameState.prevScore ? "green" : gameState.score < gameState.prevScore ? "red" : "gray";
 
