@@ -3,9 +3,9 @@ import ScoreBoard from "./components/score-board/score-board";
 import useMediator from "./hooks/useMediator";
 import classnames from "classnames";
 // import logo from "./logo.svg";
+import TextInput from "./components/text-input/text-input";
 
 import "./App.css";
-import TextInput from "./components/text-input/text-input";
 
 function App() {
   const [clientId, setClientId] = useState("");
