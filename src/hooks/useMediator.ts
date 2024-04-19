@@ -25,6 +25,8 @@ function useMediator(wsURL: string, clientId: string) {
     };
 
     ws.onmessage = (event: MessageEvent) => {
+      // ignore this automatic connected message.
+      if (event.data === "connected") return;
       // parse the stringified message to JSON.
       const wsMessage: WSMessage = JSON.parse(event.data);
 
