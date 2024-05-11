@@ -8,5 +8,3 @@ export interface WSMessage {
 export interface WSMessageData {
   score: number;
 }
-
-export const MEDIATOR_WS_URL = process.env.REACT_APP_MEDIATOR_WS_URL || "ws://localhost:8080";

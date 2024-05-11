@@ -1,0 +1,29 @@
+$notification-width: 260px;
+$notification-height: 50px;
+
+.notifications-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  .notification-list {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: $notification-width;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-right: 20px;
+
+    .notification {
+      margin-top: 10px;
+    }
+
+    .notification:last-child {
+      margin-bottom: 20px;
+    }
+  }
+}

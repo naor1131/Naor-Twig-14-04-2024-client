@@ -1,34 +1,63 @@
-import React, { useState } from "react";
-import ScoreBoard from "./components/score-board/score-board";
-import useMediator from "./hooks/useMediator";
-import classnames from "classnames";
-// import logo from "./logo.svg";
-import TextInput from "./components/text-input/text-input";
-import { MEDIATOR_WS_URL } from "./types";
+import React, { useEffect, useState } from "react";
+import PDFViewer from "./components/pdf-viewer/pdf-viewer";
+import FileUploader from "./components/file-uploader/file-uploader";
+import NotificationLayer from "./components/notification-layer/notification-layer";
+import { NotificationType } from "./services/notification-service";
+import { useDispatch, useSelector } from "react-redux";
+import { NotificationState, addNotification } from "./state/slices/NotificationsSlice";
+import { RootState } from "./state/store";
 
 import "./App.css";
 
 function App() {
-  const [clientId, setClientId] = useState("");
-  const { isConnected, gameState, errorMessage } = useMediator(MEDIATOR_WS_URL, clientId);
+  // const [selectedFile, setSelectedFile] = useState<File>();
 
-  const color = gameState.score > gameState.prevScore ? "green" : gameState.score < gameState.prevScore ? "red" : "gray";
+  const dispatch = useDispatch();
+  // const notifications = useSelector((state: RootState) => state.NotificationsSlice.notifications);
+
+  useEffect(() => {
+    dispatch(
+      addNotification({
+        type: NotificationType.INFO,
+        title: "Test Notification",
+        message: "hey this is a check to see if notifications work.",
+      })
+    );
+  }, []);
+
+  // setTimeout(() => {
+  //   dispatch(
+  //     addNotification({
+  //       type: NotificationType.SUCCESS,
+  //       title: "Test Notification",
+  //       message: "hey this is a check to see if notifications work.",
+  //     })
+  //   );
+  // }, 2000);
+
+  // setTimeout(() => {
+  //   dispatch(
+  //     addNotification({
+  //       type: NotificationType.WARNING,
+  //       title: "Test Notification",
+  //       message: "hey this is a check to see if notifications work.",
+  //     })
+  //   );
+  // }, 3000);
+
+  // setTimeout(() => {
+  //   dispatch(
+  //     addNotification({
+    //     type: NotificationType.ERROR,
+    //     title: "Test Notification",
+    //     message: "hey this is a check to see if notifications work.",
+    //   })
+    // );
+  // }, 4000);
 
   return (
     <div className="App">
-      <header className="App-header">
-        {/* <img src={logo} className={classnames("App-logo", isConnected ? "animation-active" : "")} alt="logo" /> */}
-        <TextInput
-          label="Client ID"
-          value={clientId}
-          onChange={(e) => {
-            setClientId(e.target.value);
-          }}
-          message={errorMessage}
-        />
-        <ScoreBoard title={"Score"} score={gameState.score} color={color} />
-        <div className={classnames("status", isConnected ? "connected" : "disconnected")}>{isConnected ? "connected" : "disconnected"}</div>
-      </header>
+      <NotificationLayer />
     </div>
   );
 }

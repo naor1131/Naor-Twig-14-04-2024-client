@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { WSMessage } from "../types";
+import { useDispatch } from "react-redux";
+import { resetScore, setScore } from "../state/slices/GameSlice";
 
 interface IGameState {
   score: number;
@@ -13,8 +15,8 @@ const DEFAULT_GAME_STATE: IGameState = {
 
 function useMediator(wsURL: string, clientId: string) {
   const [isWsConnected, setIsWsConnected] = useState(false);
-  const [gameState, setGameState] = useState<IGameState>(DEFAULT_GAME_STATE);
   const [errorMessage, setErrorMessage] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const wsServerURL = `${wsURL}?clientId=${clientId}`;
@@ -38,9 +40,7 @@ function useMediator(wsURL: string, clientId: string) {
       // Process the message from the server
       switch (wsMessage.messageType) {
         case "scoreUpdate":
-          setGameState((prev) => {
-            return { ...prev, prevScore: prev.score, score: wsMessage.data.score };
-          });
+          dispatch(setScore(wsMessage.data.score));
           break;
         default:
           break;
@@ -51,9 +51,7 @@ function useMediator(wsURL: string, clientId: string) {
       console.log(`WS Disconnected with code ${event.code}. \nReason: ${event.reason}`);
       setErrorMessage(event.reason);
       setIsWsConnected(false);
-      setGameState((prev) => {
-        return { ...prev, score: 0, prevScore: 0 };
-      });
+      dispatch(resetScore());
     };
 
     return () => {
@@ -61,7 +59,7 @@ function useMediator(wsURL: string, clientId: string) {
     };
   }, [clientId]);
 
-  return { isConnected: isWsConnected, gameState, errorMessage };
+  return { isConnected: isWsConnected, errorMessage };
 }
 
 export default useMediator;

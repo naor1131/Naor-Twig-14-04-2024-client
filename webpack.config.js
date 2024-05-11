@@ -1,11 +1,11 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
- const webpack = require('webpack');
+const webpack = require("webpack");
 
 module.exports = {
   mode: "development",
   entry: {
-    bundle: path.resolve(__dirname, "index.tsx"),
+    bundle: path.resolve(__dirname, "src/index.tsx"), // an entry point for typescript called bundle.
   },
   output: {
     path: path.resolve(__dirname, "build"),
@@ -51,7 +51,15 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.scss$/,
+        use: [
+          "style-loader", // Inject CSS into the DOM
+          "css-loader", // Translates CSS into CommonJS
+          "sass-loader", // Compiles Sass to CSS
+        ],
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif|pdf)$/i,
         use: [
           {
             loader: "file-loader",
@@ -61,24 +69,19 @@ module.exports = {
             },
           },
         ],
-        // type: 'asset/resource',
       },
-      // {
-      //   test: /\.svg$/,
-      //   use: ["@svgr/webpack", "url-loader"],
-      // },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: "Spinomenal - Home Assignment",
+      title: "App",
       template: path.resolve(__dirname, "public", "index.html"),
       filename: "index.html", // output html name.
     }),
 
-    // adding enviroment variables. accessible from process.env 
+    // adding enviroment variables. accessible from process.env
     new webpack.DefinePlugin({
-      'process.env.REACT_APP_MEDIATOR_WS_URL': JSON.stringify('wss://naor-twig-14-04-2024-mediator-1b8fbfd72259.herokuapp.com')
-    })
+      "process.env.MY_ENVIRONMENT_VARIABLE": 1
+    }),
   ],
 };
